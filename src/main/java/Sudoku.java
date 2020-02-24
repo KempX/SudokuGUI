@@ -64,6 +64,7 @@ public class Sudoku {
         }
     }
 
+    // todo: Diese Methode brauchts nicht, wenn aus dem File geladen wird.
     public void loadStartValues(){
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
@@ -76,10 +77,14 @@ public class Sudoku {
     }
 
     public void openValues(File file) throws IOException {
+        //todo: Wie geht die Initialisierung, wenn Daten aus dem File geladen werden?
         Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine())
-            while (scanner.hasNextInt())
-                grid[scanner.][] = scanner.nextInt(). //todo: scanner zeile und index
+        for(int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                grid[j][i].setFieldValue(scanner.nextInt());
+            }
+        }
+        printTable("Folgende Werte wurden per File geladen: ",grid);
     }
 
     public void saveValues(File file) throws IOException {
