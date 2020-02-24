@@ -1,17 +1,21 @@
+import javafx.stage.FileChooser;
+
+import java.io.*;
 import java.util.*;
 
-public class Game {
+public class Sudoku {
     private int size;
     private int fieldCount;
     public int solvedFields;
     private int iterations;
     private Field [][] grid;
+    private StartValues startValues;
     private Score [] rows;
     private Score [] columns;
     private Score [] blocks;
 
 
-    public Game (int size){
+    public Sudoku(int size){
         generateGame(size);
     }
 
@@ -21,26 +25,32 @@ public class Game {
         fieldCount = size * size;
         solvedFields = 0;
         iterations = 0;
+        startValues = new StartValues();
         rows = new Score[size];
         columns = new Score[size];
         blocks = new Score[size];
 
-        // Reset Fields
+        ResetFields(size);
+        GenerateScoreArrays(size);
+        SetBlocks();
+    }
+    private void ResetFields(int size) {
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
                 grid[i][j] = new Field();
                 grid[i][j].reset(size);
             }
         }
+    }
 
-        // Generate Score Arrays
+    private void GenerateScoreArrays(int size) {
         for(int i = 0; i< size; i++){
             rows[i] = new Score(size);
             columns[i] = new Score(size);
             blocks[i] = new Score(size);
         }
-
-        // Set Blocks
+    }
+    private void SetBlocks() {
         int b = 0;
         for(int bi = 0; bi < 3; bi++){
             for(int bj = 0; bj < 3; bj++){
@@ -54,15 +64,33 @@ public class Game {
         }
     }
 
-    public void loadStartValues(int [][] startValues){
+    public void loadStartValues(){
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
-                if (startValues[i][j] != 0) {
-                    setFieldValue(j, i, startValues[i][j]);
+                if (startValues.getStartValues()[i][j] != 0) {
+                    setFieldValue(j, i, startValues.getStartValues()[i][j]);
                 }
             }
         }
         printTable("Die Vorgabe ist: ", grid);
+    }
+
+    public void openValues(File file) throws IOException {
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine())
+            while (scanner.hasNextInt())
+                grid[scanner.][] = scanner.nextInt(). //todo: scanner zeile und index
+    }
+
+    public void saveValues(File file) throws IOException {
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+        for(int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                out.print(grid[j][i].getFieldValue() + "  ");
+            }
+            out.println();
+        }
+        out.close();
     }
 
     public int getFieldCount() {

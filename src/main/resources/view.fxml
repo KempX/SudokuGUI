@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane alignment="center" hgap="10" prefHeight="400.0" prefWidth="600.0" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+
+     <Button fx:id="load" text="Load" />
+    <Button fx:id="solve" text="Solve" GridPane.rowIndex="1" />
+    <Button fx:id="save" text="Save" GridPane.rowIndex="2" />
+    <Button fx:id="open" text="Open" GridPane.rowIndex="3"/>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+   </rowConstraints>
+
+</GridPane>
