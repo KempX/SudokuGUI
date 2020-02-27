@@ -1,56 +1,55 @@
-import javafx.stage.FileChooser;
-
 import java.io.*;
 import java.util.*;
 
 public class Sudoku {
     private int size;
     private int fieldCount;
-    public int solvedFields;
+    private int solvedFields;
     private int iterations;
     private Field [][] grid;
-    private StartValues startValues;
     private Score [] rows;
     private Score [] columns;
     private Score [] blocks;
 
 
     public Sudoku(int size){
-        generateGame(size);
-    }
-
-    private void generateGame(int size) {
-        grid = new Field[size][size];
         this.size = size;
         fieldCount = size * size;
-        solvedFields = 0;
-        iterations = 0;
-        startValues = new StartValues();
+        grid = new Field[size][size];
         rows = new Score[size];
         columns = new Score[size];
         blocks = new Score[size];
 
-        ResetFields(size);
-        GenerateScoreArrays(size);
-        SetBlocks();
+        generateFields(size);
+        generateScores(size);
+        setBlocks();
     }
-    private void ResetFields(int size) {
+
+    public void reset() {
+        solvedFields = 0;
+        generateFields(size);
+        generateScores(size);
+        setBlocks();
+    }
+
+    private void generateFields(int size) {
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
-                grid[i][j] = new Field();
-                grid[i][j].reset(size);
+                grid[i][j] = new Field(size);
+               // grid[i][j].reset(size);
             }
         }
     }
 
-    private void GenerateScoreArrays(int size) {
+    private void generateScores(int size) {
         for(int i = 0; i< size; i++){
             rows[i] = new Score(size);
             columns[i] = new Score(size);
             blocks[i] = new Score(size);
         }
     }
-    private void SetBlocks() {
+
+    private void setBlocks() { //todo: funktioniert nur bei 3x3
         int b = 0;
         for(int bi = 0; bi < 3; bi++){
             for(int bj = 0; bj < 3; bj++){
@@ -64,24 +63,20 @@ public class Sudoku {
         }
     }
 
-    // todo: Diese Methode brauchts nicht, wenn aus dem File geladen wird.
-    public void loadStartValues(){
-        for(int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                if (startValues.getStartValues()[i][j] != 0) {
-                    setFieldValue(j, i, startValues.getStartValues()[i][j]);
-                }
-            }
-        }
-        printTable("Die Vorgabe ist: ", grid);
-    }
-
     public void openValues(File file) throws IOException {
-        //todo: Wie geht die Initialisierung, wenn Daten aus dem File geladen werden?
+        int value;
         Scanner scanner = new Scanner(file);
+
+        this.reset();
+
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
-                grid[j][i].setFieldValue(scanner.nextInt());
+                value = scanner.nextInt();
+                if (true){
+                    if (value != 0) {
+                        setFieldValue(j, i, value);
+                    }
+                }
             }
         }
         printTable("Folgende Werte wurden per File geladen: ",grid);
@@ -100,6 +95,10 @@ public class Sudoku {
 
     public int getFieldCount() {
         return fieldCount;
+    }
+
+    public Field[][] getGrid(){
+        return grid;
     }
 
     public void setFieldValue (int x, int y, int value){

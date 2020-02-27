@@ -16,10 +16,11 @@ import java.util.ResourceBundle;
 public class Presenter implements Initializable {
     private final Sudoku sudoku;
 
-    @FXML private Button load;
     @FXML private Button solve;
     @FXML private Button save;
     @FXML private Button open;
+    @FXML private Button print;
+    @FXML private Button reset;
 
     public Presenter(Sudoku sudoku){
         this.sudoku = sudoku;
@@ -27,18 +28,23 @@ public class Presenter implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        load.setOnAction(this::loadButtonHandler);
         solve.setOnAction(this::solveButtonHandler);
         save.setOnAction(this::saveButtonHandler);
         open.setOnAction(this::openButtonHandler);
-    }
-
-    public void loadButtonHandler(ActionEvent actionEvent){
-        sudoku.loadStartValues();
+        print.setOnAction(this::printButtonHandler);
+        reset.setOnAction(this::resetButtonHandler);
     }
 
     public void solveButtonHandler(ActionEvent actionEvent){
         sudoku.solve();
+    }
+
+    public void printButtonHandler(ActionEvent actionEvent){
+        sudoku.printTable("Das aktuelle Sudoku: ", sudoku.getGrid());
+    }
+
+    public void resetButtonHandler(ActionEvent actionEvent){
+        sudoku.reset();
     }
 
     public void saveButtonHandler(ActionEvent actionEvent){

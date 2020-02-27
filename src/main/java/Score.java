@@ -5,7 +5,10 @@ public class Score {
     private Map<Integer, Integer> scores = new HashMap();
 
     public Score(int size){
-        reset(size);
+        scores.clear();
+        for(int i = 1; i < (size + 1); i++) {
+            scores.put(i, 0);
+        }
     }
 
     public void reset(int size){

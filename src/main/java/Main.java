@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
     private Stage primaryStage;
     public static void main(String[] args) {
         launch(args);
@@ -14,8 +15,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Sudoku sudoku = new Sudoku(9);
-        //sudoku.loadStartValues(startValues.getStartValues());
-        //sudoku.solve();
 
         Presenter presenter = new Presenter(sudoku);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));

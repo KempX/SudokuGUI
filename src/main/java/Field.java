@@ -5,7 +5,7 @@ public class Field {
     private Set<Integer> possibleValues = new HashSet<Integer>();
     private int block;
 
-    public void reset(int size) {
+    public Field(int size) {
         possibleValues.clear();
         for (int i = 1; i < (size + 1); i++){
             possibleValues.add(i);
