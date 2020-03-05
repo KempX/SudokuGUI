@@ -1,11 +1,22 @@
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.util.*;
 
 public class Field {
-    private int fieldValue;
+    private IntegerProperty fieldValue = new SimpleIntegerProperty();
     private Set<Integer> possibleValues = new HashSet<Integer>();
+    private int size;
     private int block;
 
     public Field(int size) {
+        this.size = size;
+        possibleValues.clear();
+        resetPossibleValues(size);
+    }
+
+    private void resetPossibleValues(int size) {
         possibleValues.clear();
         for (int i = 1; i < (size + 1); i++){
             possibleValues.add(i);
@@ -13,12 +24,21 @@ public class Field {
     }
 
     public void setFieldValue(int i){
-        fieldValue = i;
-        possibleValues.clear();
-        possibleValues.add(i);
+        if (i == 0){
+            fieldValue.set(0);
+            resetPossibleValues(size);
+        } else {
+            fieldValue.set(i);
+            possibleValues.clear();
+            possibleValues.add(i);
+        }
     }
 
     public int getFieldValue(){
+        return fieldValue.getValue();
+    }
+
+    public IntegerProperty getProperty() {
         return fieldValue;
     }
 

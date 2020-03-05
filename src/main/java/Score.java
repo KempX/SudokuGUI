@@ -24,8 +24,11 @@ public class Score {
     }
 
     public void increaseScore (int key){
-        int count = scores.get(key);
-        scores.put(key, count + 1);
+        if(key == 0){}
+        else {
+            int count = scores.get(key);
+            scores.put(key, count + 1);
+        }
     }
 
     public int getScore (int key){

@@ -1,3 +1,8 @@
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.*;
 import java.util.*;
 
@@ -10,6 +15,8 @@ public class Sudoku {
     private Score [] rows;
     private Score [] columns;
     private Score [] blocks;
+   // private IntegerProperty [][] numbers = new SimpleIntegerProperty();
+    ObservableList<ObservableList<Integer>> matrix = FXCollections.observableArrayList();
 
 
     public Sudoku(int size){
@@ -27,16 +34,21 @@ public class Sudoku {
 
     public void reset() {
         solvedFields = 0;
-        generateFields(size);
-        generateScores(size);
-        setBlocks();
+        resetFields();
     }
 
     private void generateFields(int size) {
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
                 grid[i][j] = new Field(size);
-               // grid[i][j].reset(size);
+            }
+        }
+    }
+
+    private void resetFields(){
+        for(int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++) {
+                grid[i][j].setFieldValue(0);
             }
         }
     }
@@ -48,6 +60,8 @@ public class Sudoku {
             blocks[i] = new Score(size);
         }
     }
+
+
 
     private void setBlocks() { //todo: funktioniert nur bei 3x3
         int b = 0;
@@ -63,6 +77,10 @@ public class Sudoku {
         }
     }
 
+    public int getSize(){
+        return size;
+    }
+
     public void openValues(File file) throws IOException {
         int value;
         Scanner scanner = new Scanner(file);
@@ -72,11 +90,11 @@ public class Sudoku {
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
                 value = scanner.nextInt();
-                if (true){
-                    if (value != 0) {
-                        setFieldValue(j, i, value);
-                    }
+
+                if (value != 0) {
+                    setFieldValue(j, i, value);
                 }
+
             }
         }
         printTable("Folgende Werte wurden per File geladen: ",grid);
@@ -105,7 +123,9 @@ public class Sudoku {
         grid[x][y].setFieldValue(value);
         removePossibleValues(x, y, value);
         calculateScore();
-        solvedFields++;
+        if (value != 0) {
+            solvedFields++;
+        }
     }
 
     public void removePossibleValues (int x, int y, int value){
@@ -129,7 +149,7 @@ public class Sudoku {
     }
 
     public void solve(){
-        while (solvedFields < fieldCount){
+        for (int t = 0; t < 100; t++){
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if(grid[i][j].getFieldValue() == 0){
@@ -144,7 +164,11 @@ public class Sudoku {
             }
             iterations++;
         }
-        printTable("Die Lösung ist: ", grid);
+        if (solvedFields < fieldCount){
+            System.out.println("Keine Lösung mit diesem Algorithmus möglich.");
+        } else {
+            printTable("Die Lösung ist: ", grid);
+        }
     }
 
     public void printTable(String text, Field [][] table) {
