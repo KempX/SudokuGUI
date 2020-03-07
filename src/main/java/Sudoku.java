@@ -1,8 +1,5 @@
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.io.*;
 import java.util.*;
 
@@ -15,9 +12,7 @@ public class Sudoku {
     private Score [] rows;
     private Score [] columns;
     private Score [] blocks;
-   // private IntegerProperty [][] numbers = new SimpleIntegerProperty();
-    ObservableList<ObservableList<Integer>> matrix = FXCollections.observableArrayList();
-
+    private FileIO fileIO = new FileIO(this);
 
     public Sudoku(int size){
         this.size = size;
@@ -32,23 +27,10 @@ public class Sudoku {
         setBlocks();
     }
 
-    public void reset() {
-        solvedFields = 0;
-        resetFields();
-    }
-
     private void generateFields(int size) {
         for(int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
                 grid[i][j] = new Field(size);
-            }
-        }
-    }
-
-    private void resetFields(){
-        for(int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++) {
-                grid[i][j].setFieldValue(0);
             }
         }
     }
@@ -60,8 +42,6 @@ public class Sudoku {
             blocks[i] = new Score(size);
         }
     }
-
-
 
     private void setBlocks() { //todo: funktioniert nur bei 3x3
         int b = 0;
@@ -77,54 +57,39 @@ public class Sudoku {
         }
     }
 
+    public void reset() {
+        solvedFields = 0;
+        resetFields();
+    }
+
+    private void resetFields(){
+        for(int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++) {
+                grid[i][j].setFieldValue(0);
+            }
+        }
+    }
+
     public int getSize(){
         return size;
-    }
-
-    public void openValues(File file) throws IOException {
-        int value;
-        Scanner scanner = new Scanner(file);
-
-        this.reset();
-
-        for(int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                value = scanner.nextInt();
-
-                if (value != 0) {
-                    setFieldValue(j, i, value);
-                }
-
-            }
-        }
-        printTable("Folgende Werte wurden per File geladen: ",grid);
-    }
-
-    public void saveValues(File file) throws IOException {
-        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-        for(int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                out.print(grid[j][i].getFieldValue() + "  ");
-            }
-            out.println();
-        }
-        out.close();
-    }
-
-    public int getFieldCount() {
-        return fieldCount;
     }
 
     public Field[][] getGrid(){
         return grid;
     }
 
+    public FileIO getFileIO(){
+        return fileIO;
+    }
+
     public void setFieldValue (int x, int y, int value){
-        grid[x][y].setFieldValue(value);
-        removePossibleValues(x, y, value);
-        calculateScore();
-        if (value != 0) {
-            solvedFields++;
+        if(grid[x][y].getFieldValue() != value) {
+            grid[x][y].setFieldValue(value);
+            removePossibleValues(x, y, value);
+            calculateScore();
+            if (value != 0) {
+                solvedFields++;
+            }
         }
     }
 
@@ -148,40 +113,6 @@ public class Sudoku {
         grid[x][y].addPossibleValue(value);
     }
 
-    public void solve(){
-        for (int t = 0; t < 100; t++){
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    if(grid[i][j].getFieldValue() == 0){
-                        for (int v : grid[i][j].getPossibleValues()){
-                            if (rows[j].getScore(v) == 1 || columns[i].getScore(v) == 1 || blocks[grid[i][j].getBlock()].getScore(v) == 1){
-                                setFieldValue(i,j,v);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            iterations++;
-        }
-        if (solvedFields < fieldCount){
-            System.out.println("Keine Lösung mit diesem Algorithmus möglich.");
-        } else {
-            printTable("Die Lösung ist: ", grid);
-        }
-    }
-
-    public void printTable(String text, Field [][] table) {
-        System.out.println(text);
-        for(int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                System.out.print(table[j][i].getFieldValue() + "  ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
     public void calculateScore(){
         for (int i = 0; i < size; i++){
             rows[i].reset(size);
@@ -198,5 +129,47 @@ public class Sudoku {
                 }
             }
         }
+    }
+
+    public void solve(){
+        solveWithOwnAlgorithm();
+        if (solvedFields == fieldCount){
+            System.out.printf("Iterationen: %d\n", iterations);
+            printTable("Folgende Lösung wurde mit dem eigenen Algorithmus gefunden: ", grid);
+        } else {
+            System.out.println("Keine Lösung mit eigenem Algorithmus möglich.");
+            //todo: solveWithWebAlgorithm();
+        }
+    }
+
+    private void solveWithOwnAlgorithm() {
+        iterations = 0;
+
+        while ((solvedFields < fieldCount) && (iterations < 100)){
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    if(grid[i][j].getFieldValue() == 0){
+                        for (int v : grid[i][j].getPossibleValues()){
+                            if (rows[j].getScore(v) == 1 || columns[i].getScore(v) == 1 || blocks[grid[i][j].getBlock()].getScore(v) == 1){
+                                setFieldValue(i,j,v);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            iterations++;
+        }
+    }
+
+    public void printTable(String text, Field [][] table) {
+        System.out.println(text);
+        for(int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                System.out.print(table[j][i].getFieldValue() + "  ");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 }

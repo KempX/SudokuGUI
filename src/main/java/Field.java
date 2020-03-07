@@ -1,7 +1,5 @@
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
-
 import java.util.*;
 
 public class Field {

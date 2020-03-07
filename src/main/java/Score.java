@@ -18,11 +18,6 @@ public class Score {
         }
     }
 
-    public void reduceScore (int key){
-        int count = scores.get(key);
-        scores.put(key, count - 1);
-    }
-
     public void increaseScore (int key){
         if(key == 0){}
         else {
