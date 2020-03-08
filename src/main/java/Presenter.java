@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 public class Presenter implements Initializable {
     private final Sudoku sudoku;
 
+    @FXML private VBox menu;
     @FXML private Button solve;
     @FXML private Button save;
     @FXML private Button open;
@@ -40,6 +42,8 @@ public class Presenter implements Initializable {
                 textField.setStyle("-fx-pref-width: 2em;");
                 textField.setOnMouseClicked(e -> textField.selectAll());
                 board.setConstraints(textField, i, j);
+                board.setHgap(4);
+                board.setVgap(4);
                 board.getChildren().add(textField);
 
                 textField.textProperty().addListener((observable, oldValue, newValue) -> {

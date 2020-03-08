@@ -1,12 +1,20 @@
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     private Stage primaryStage;
+    GridPane board = new GridPane();
+    //  root.getChildren().add(board);
+
+    VBox menu = new VBox();
+    //    root.getChildren().add(menu);
     public static void main(String[] args) {
         launch(args);
     }
@@ -18,7 +26,12 @@ public class Main extends Application {
         Presenter presenter = new Presenter(sudoku);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));
         loader.setController(presenter);
-        GridPane root = loader.load();
+        BorderPane root = loader.load();
+
+
+
+
+
 
    /*     GridPane board = new GridPane();
         for (int blockColumn = 0; blockColumn < 3 ; blockColumn++) {
@@ -41,22 +54,18 @@ public class Main extends Application {
             }
         }*/
 
-        GridPane board = new GridPane();
-        root.getChildren().add(board);
+
+
         initScene(primaryStage, root);
         primaryStage.setTitle("Sudoku");
         primaryStage.show();
         this.primaryStage = primaryStage;
     }
 
-    private void initScene(Stage primaryStage, GridPane root){
-        final int width = 600;
-        final int height = 400;
+    private void initScene(Stage primaryStage, BorderPane root){
+        final int width = 450;
+        final int height = 350;
         Scene scene = new Scene(root, width, height);
         primaryStage.setScene(scene);
-    }
-
-    public Stage getPrimaryStage(){
-        return primaryStage;
     }
 }
