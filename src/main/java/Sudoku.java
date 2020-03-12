@@ -1,3 +1,4 @@
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.*;
@@ -12,6 +13,7 @@ public class Sudoku {
     private Score [] rows;
     private Score [] columns;
     private Score [] blocks;
+    private SimpleStringProperty status = new SimpleStringProperty();
     private FileIO fileIO = new FileIO(this);
 
     public Sudoku(int size){
@@ -136,6 +138,7 @@ public class Sudoku {
         if (solvedFields == fieldCount){
             System.out.printf("Iterationen: %d\n", iterations);
             printTable("Folgende Lösung wurde mit dem eigenen Algorithmus gefunden: ", grid);
+            setStatus("Diese Lösung wurde mit dem eigenen Algorithmus in " + iterations + " Schritten gefunden. ");
         } else {
             System.out.println("Keine Lösung mit eigenem Algorithmus möglich.");
             //todo: solveWithWebAlgorithm();
@@ -171,5 +174,13 @@ public class Sudoku {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public SimpleStringProperty getStatus(){
+        return status;
+    }
+
+    public void setStatus (String text){
+        status.set(text);
     }
 }

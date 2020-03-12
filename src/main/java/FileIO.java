@@ -24,6 +24,7 @@ public class FileIO {
             }
         }
         sudoku.printTable("Folgende Werte wurden per File geladen: ", sudoku.getGrid());
+        sudoku.setStatus("File geladen. ");
     }
 
     public void saveValues(File file) throws IOException {
@@ -35,5 +36,6 @@ public class FileIO {
             out.println();
         }
         out.close();
+        sudoku.setStatus("File gespeichert. ");
     }
 }

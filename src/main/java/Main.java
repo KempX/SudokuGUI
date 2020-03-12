@@ -31,8 +31,6 @@ public class Main extends Application {
 
 
 
-
-
    /*     GridPane board = new GridPane();
         for (int blockColumn = 0; blockColumn < 3 ; blockColumn++) {
             for (int blockRow = 0; blockRow < 3; blockRow++) {

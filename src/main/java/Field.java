@@ -10,8 +10,7 @@ public class Field {
 
     public Field(int size) {
         this.size = size;
-        possibleValues.clear();
-        resetPossibleValues(size);
+        setFieldValue(0);
     }
 
     private void resetPossibleValues(int size) {
