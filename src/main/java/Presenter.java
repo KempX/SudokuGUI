@@ -2,19 +2,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.UnaryOperator;
 
 public class Presenter implements Initializable {
     private final Sudoku sudoku;
@@ -37,13 +32,10 @@ public class Presenter implements Initializable {
         solve.setOnAction(this::solveButtonHandler);
         save.setOnAction(this::saveButtonHandler);
         open.setOnAction(this::openButtonHandler);
-        print.setOnAction(this::printButtonHandler);
+//        print.setOnAction(this::printButtonHandler);
         reset.setOnAction(this::resetButtonHandler);
 
         sudoku.getStatus().addListener((observable, oldValue, newValue) -> status.setText(newValue));
-
-        Image img = new Image("file:background.png");
-        ImageView imageView = new ImageView(img);
 
         for(int i = 0; i < sudoku.getSize(); i++){
             for (int j = 0; j < sudoku.getSize(); j++){

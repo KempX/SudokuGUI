@@ -4,24 +4,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<BorderPane fx:id="root" minHeight="350.0" minWidth="450.0" prefHeight="350.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" minHeight="350" minWidth="460" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <GridPane fx:id="board" alignment="CENTER" style="-fx-background-image: url('background.png');
-                                                          -fx-background-size: 276 284;
+                                                          -fx-background-size: 276 288;
                                                           -fx-background-position: center center;
                                                           -fx-background-repeat: stretch;">
         </GridPane>
     </center>
 
     <right>
-        <VBox fx:id="menu" alignment="CENTER" minWidth="100.0" spacing="10.0">
-            <Button fx:id="print" minWidth="60.0" text="Print" />
-            <Button fx:id="solve" minWidth="60.0" text="Solve" />
-            <Button fx:id="reset" minWidth="60.0" text="Reset" />
-            <Button fx:id="save" minWidth="60.0" text="Save" />
-            <Button fx:id="open" minWidth="60.0" text="Open" />
+        <VBox fx:id="menu" alignment="CENTER" minWidth="140.0" spacing="10.0">
+            <Button fx:id="open" minWidth="100.0" text="Öffnen" />
+            <Button fx:id="save" minWidth="100.0" text="Speichern" />
+            <Button fx:id="reset" minWidth="100.0" text="Zurücksetzen" />
+            <Button fx:id="solve" minWidth="100.0" text="Lösen" />
+            <!-- <Button fx:id="print" minWidth="60.0" text="Print" />-->
         </VBox>
     </right>
 
@@ -34,6 +32,4 @@
             </padding>
         </HBox>
     </bottom>
-
-
 </BorderPane>

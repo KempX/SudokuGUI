@@ -1,20 +1,16 @@
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.io.*;
-import java.util.*;
 
 public class Sudoku {
     private int size;
     private int fieldCount;
     private int solvedFields;
-    private int iterations;
     private Field [][] grid;
     private Score [] rows;
     private Score [] columns;
     private Score [] blocks;
     private SimpleStringProperty status = new SimpleStringProperty();
     private FileIO fileIO = new FileIO(this);
+    private SolvingAlgorithms solvingAlgorithms;
 
     public Sudoku(int size){
         this.size = size;
@@ -76,6 +72,26 @@ public class Sudoku {
         return size;
     }
 
+    public int getSolvedFields(){
+        return solvedFields;
+    }
+
+    public int getFieldCount(){
+        return fieldCount;
+    }
+
+    public Score [] getRows(){
+        return rows;
+    }
+
+    public Score [] getColumns(){
+        return columns;
+    }
+
+    public Score [] getBlocks(){
+        return blocks;
+    }
+
     public Field[][] getGrid(){
         return grid;
     }
@@ -115,6 +131,11 @@ public class Sudoku {
         grid[x][y].addPossibleValue(value);
     }
 
+    public void solve (){
+        solvingAlgorithms = new SolvingAlgorithms(this, getGrid());
+        solvingAlgorithms.solve();
+    }
+
     public void calculateScore(){
         for (int i = 0; i < size; i++){
             rows[i].reset(size);
@@ -130,38 +151,6 @@ public class Sudoku {
                     blocks[grid[i][j].getBlock()].increaseScore(v);
                 }
             }
-        }
-    }
-
-    public void solve(){
-        solveWithOwnAlgorithm();
-        if (solvedFields == fieldCount){
-            System.out.printf("Iterationen: %d\n", iterations);
-            printTable("Folgende Lösung wurde mit dem eigenen Algorithmus gefunden: ", grid);
-            setStatus("Diese Lösung wurde mit dem eigenen Algorithmus in " + iterations + " Schritten gefunden. ");
-        } else {
-            System.out.println("Keine Lösung mit eigenem Algorithmus möglich.");
-            //todo: solveWithWebAlgorithm();
-        }
-    }
-
-    private void solveWithOwnAlgorithm() {
-        iterations = 0;
-
-        while ((solvedFields < fieldCount) && (iterations < 100)){
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    if(grid[i][j].getFieldValue() == 0){
-                        for (int v : grid[i][j].getPossibleValues()){
-                            if (rows[j].getScore(v) == 1 || columns[i].getScore(v) == 1 || blocks[grid[i][j].getBlock()].getScore(v) == 1){
-                                setFieldValue(i,j,v);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            iterations++;
         }
     }
 

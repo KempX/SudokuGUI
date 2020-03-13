@@ -58,8 +58,4 @@ public class Field {
     public Set<Integer> getPossibleValues (){
         return possibleValues;
     }
-
-    public boolean hasPossibleValue(int i){
-        return possibleValues.contains(i);
-    }
 }
