@@ -1,8 +1,8 @@
 public class SolvingAlgorithms {
-    Sudoku sudoku;
-    Field [][] grid;
-    int iterations;
-    int size;
+    private Sudoku sudoku;
+    private Field [][] grid;
+    private int iterations;
+    private int size;
 
     public SolvingAlgorithms (Sudoku sudoku, Field [][] grid){
         this.sudoku = sudoku;
@@ -30,7 +30,7 @@ public class SolvingAlgorithms {
                 for (int j = 0; j < size; j++) {
                     if(grid[i][j].getFieldValue() == 0){
                         for (int v : grid[i][j].getPossibleValues()){
-                            if (sudoku.getRows()[j].getScore(v) == 1 || sudoku.getColumns()[i].getScore(v) == 1 || sudoku.getBlocks()[grid[i][j].getBlock()].getScore(v) == 1){
+                            if (sudoku.isFieldSolvable(i, j, v)){
                                 sudoku.setFieldValue(i,j,v);
                                 break;
                             }
@@ -42,7 +42,7 @@ public class SolvingAlgorithms {
         }
     }
 
-    public boolean solveWithBacktracking(){
+    private boolean solveWithBacktracking(){
         int row = -1;
         int col = -1;
         boolean isEmpty = true;
@@ -79,7 +79,7 @@ public class SolvingAlgorithms {
         return false;
     }
 
-    public boolean isSafe(int row, int col, int num)
+    private boolean isSafe(int row, int col, int num)
     {
         for (int d = 0; d < grid.length; d++){
             if (grid[row][d].getFieldValue() == num){

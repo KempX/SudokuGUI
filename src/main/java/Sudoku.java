@@ -68,38 +68,6 @@ public class Sudoku {
         }
     }
 
-    public int getSize(){
-        return size;
-    }
-
-    public int getSolvedFields(){
-        return solvedFields;
-    }
-
-    public int getFieldCount(){
-        return fieldCount;
-    }
-
-    public Score [] getRows(){
-        return rows;
-    }
-
-    public Score [] getColumns(){
-        return columns;
-    }
-
-    public Score [] getBlocks(){
-        return blocks;
-    }
-
-    public Field[][] getGrid(){
-        return grid;
-    }
-
-    public FileIO getFileIO(){
-        return fileIO;
-    }
-
     public void setFieldValue (int x, int y, int value){
         if(grid[x][y].getFieldValue() != value) {
             grid[x][y].setFieldValue(value);
@@ -136,6 +104,18 @@ public class Sudoku {
         solvingAlgorithms.solve();
     }
 
+    public boolean isFieldSolvable (int i, int j, int v){
+        int rowScore = rows[j].getScore(v);
+        int columnScore = columns[i].getScore(v);
+        int blockScore = blocks[grid[i][j].getBlock()].getScore(v);
+
+        if (rowScore == 1 || columnScore == 1 || blockScore == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void calculateScore(){
         for (int i = 0; i < size; i++){
             rows[i].reset(size);
@@ -165,11 +145,31 @@ public class Sudoku {
         System.out.println();
     }
 
+    public void setStatus (String text){
+        status.set(text);
+    }
+
     public SimpleStringProperty getStatus(){
         return status;
     }
 
-    public void setStatus (String text){
-        status.set(text);
+    public int getSize(){
+        return size;
+    }
+
+    public int getSolvedFields(){
+        return solvedFields;
+    }
+
+    public int getFieldCount(){
+        return fieldCount;
+    }
+
+    public Field[][] getGrid(){
+        return grid;
+    }
+
+    public FileIO getFileIO(){
+        return fileIO;
     }
 }

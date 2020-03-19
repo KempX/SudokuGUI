@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class Score {
-
     private Map<Integer, Integer> scores = new HashMap();
 
     public Score(int size){
@@ -19,8 +18,7 @@ public class Score {
     }
 
     public void increaseScore (int key){
-        if(key == 0){}
-        else {
+        if(key != 0){
             int count = scores.get(key);
             scores.put(key, count + 1);
         }
