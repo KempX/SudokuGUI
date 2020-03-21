@@ -1,3 +1,4 @@
+import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
@@ -36,7 +37,10 @@ public class Presenter implements Initializable {
         reset.setOnAction(this::resetButtonHandler);
 
         sudoku.getStatus().addListener((observable, oldValue, newValue) -> status.setText(newValue));
+        createBoard();
+    }
 
+    private void createBoard() {
         for(int i = 0; i < sudoku.getSize(); i++){
             for (int j = 0; j < sudoku.getSize(); j++){
                 TextField textField = new TextField("0");
@@ -47,29 +51,37 @@ public class Presenter implements Initializable {
                 board.setVgap(4);
                 board.getChildren().add(textField);
 
-                textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    Integer columnIndex = GridPane.getColumnIndex(textField);
-                    Integer rowIndex = GridPane.getRowIndex(textField);
-
-                    if (newValue.matches("\\d")){
-                        sudoku.setFieldValue(columnIndex, rowIndex, Integer.parseInt(newValue));
-                    } else {
-                        sudoku.setFieldValue(columnIndex, rowIndex, 0);
-                        textField.setText("0");
-                    }
-                });
-
-                sudoku.getGrid()[i][j].getProperty().addListener((observable, oldValue, newValue) -> {
-                    textField.textProperty().setValue(String.valueOf(newValue));
-
-                    if (newValue.intValue() == 0){
-                        textField.setStyle("-fx-text-fill: white; -fx-pref-width: 2em; -fx-background-color: white; ");
-                    } else {
-                        textField.setStyle("-fx-text-fill: black; -fx-pref-width: 2em; -fx-background-color: white; ");
-                    }
-                });
+                addListenerToTextField(textField);
+                addListenerToFieldValue(i, j, textField);
             }
         }
+    }
+
+    private void addListenerToTextField(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            Integer columnIndex = GridPane.getColumnIndex(textField);
+            Integer rowIndex = GridPane.getRowIndex(textField);
+
+            if (newValue.matches("\\d")){
+                sudoku.setFieldValue(columnIndex, rowIndex, Integer.parseInt(newValue));
+            } else {
+                sudoku.setFieldValue(columnIndex, rowIndex, 0);
+                textField.setText("0");
+            }
+        });
+    }
+
+    private void addListenerToFieldValue(int i, int j, TextField textField) {
+        IntegerProperty fieldProperty = sudoku.getGrid()[i][j].getProperty();
+        fieldProperty.addListener((observable, oldValue, newValue) -> {
+            textField.textProperty().setValue(String.valueOf(newValue));
+
+            if (newValue.intValue() == 0){
+                textField.setStyle("-fx-text-fill: white; -fx-pref-width: 2em; -fx-background-color: white; ");
+            } else {
+                textField.setStyle("-fx-text-fill: black; -fx-pref-width: 2em; -fx-background-color: white; ");
+            }
+        });
     }
 
     public void solveButtonHandler(ActionEvent actionEvent){

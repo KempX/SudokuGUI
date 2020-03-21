@@ -25,7 +25,7 @@ public class SolvingAlgorithms {
     }
 
     private void solveWithOwnAlgorithm() {
-        while ((sudoku.getSolvedFields() < sudoku.getFieldCount()) && (iterations < 100)){
+        while ((sudoku.getSolvedFields() < sudoku.getFieldCount()) && (iterations < 50)){
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if(grid[i][j].getFieldValue() == 0){
